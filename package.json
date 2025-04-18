@@ -1,0 +1,16 @@
+{
+  "name": "chatbot-demo",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently \"npm run dev --prefix frontend\" \"npm run dev --prefix backend\"",
+    "build": "npm run build --prefix frontend",
+    "start": "concurrently \"npm run start --prefix frontend\" \"npm run start --prefix backend\""
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  },
+  "dependencies": {
+    "dotenv": "^16.5.0",
+    "openai": "^4.95.0"
+  }
+}
