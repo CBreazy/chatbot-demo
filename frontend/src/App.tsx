@@ -63,10 +63,19 @@ const App = () => {
     setUseFineTunedModel(e.target.checked);
   };
 
-  const handleFeedback = (messageIndex: number, feedback: "up" | "down") => {
+  const handleFeedback = async (messageIndex: number, feedback: "up" | "down") => {
     const message = messages[messageIndex];
     console.log(`Feedback for message: "${message.content}" = ${feedback}`);
-    // Optionally store feedback or send to backend
+  
+    try {
+      await axios.post("http://localhost:3001/api/feedback", {
+        message: message.content,
+        model: message.model,
+        feedback,
+      });
+    } catch (error) {
+      console.error("Failed to submit feedback:", error);
+    }
   };
 
   return (

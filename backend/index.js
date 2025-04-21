@@ -1,4 +1,5 @@
 // backend/index.js (CommonJS version)
+const fs = require("fs");
 const path = require('path');
 require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
 const express = require("express");
@@ -86,6 +87,34 @@ app.post("/api/message", async (req, res) => {
     threadId: thread.id,
   });
 });
+
+  // ========== Feedback API ==========
+  // Feedback route
+  app.post("/api/feedback", (req, res) => {
+    const { message, model, feedback } = req.body;
+
+    if (!message || !feedback) {
+      return res.status(400).json({ error: "Missing message or feedback" });
+    }
+
+    const feedbackEntry = {
+      timestamp: new Date().toISOString(),
+      message,
+      model: model || null,
+      feedback, // "up" or "down"
+    };
+
+    const feedbackFilePath = path.join(__dirname, "feedback.jsonl");
+    const feedbackLine = JSON.stringify(feedbackEntry) + "\n";
+
+    fs.appendFile(feedbackFilePath, feedbackLine, (err) => {
+      if (err) {
+        console.error("Error writing feedback:", err);
+        return res.status(500).json({ error: "Failed to save feedback" });
+      }
+      res.json({ success: true });
+    });
+  });
 
 app.listen(3001, () =>
   console.log("✅ Backend running on http://localhost:3001")
