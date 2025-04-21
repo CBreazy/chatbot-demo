@@ -14,7 +14,7 @@ This is an AI-powered chatbot prototype built as a modular boilerplate for busin
 
 ## 📁 Project Structure
 
-\`\`\`bash
+```bash
 chatbot-demo/
 ├── .env                    # Global environment config (API keys, model ID)
 ├── backend/                # Express API server
@@ -27,7 +27,7 @@ chatbot-demo/
 ├── .gitignore
 ├── package.json
 └── README.md
-\`\`\`
+```
 
 ---
 
