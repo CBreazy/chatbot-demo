@@ -35,27 +35,27 @@ chatbot-demo/
 
 ### 1. Install Dependencies
 
-\`\`\`bash
+```bash
 # From project root
 npm install
 cd backend && npm install
 cd ../frontend && npm install
-\`\`\`
+```
 
 ### 2. Create `.env` File
 
-\`\`\`env
+```bash
 # .env at root
 OPENAI_API_KEY=your-api-key
 FINE_TUNED_MODEL_ID=ft:gpt-4o:your-org::your-model
 OPENAI_ORG_ID=your-org-id (optional)
-\`\`\`
+```
 
 ### 3. Run the App
 
 In separate terminals:
 
-\`\`\`bash
+```bash
 # Terminal 1 (backend)
 cd backend
 npm start
@@ -63,7 +63,7 @@ npm start
 # Terminal 2 (frontend)
 cd frontend
 npm run dev
-\`\`\`
+```
 
 App should be running at `http://localhost:3000` (or whatever port Vite is configured for).
 
@@ -80,7 +80,7 @@ App should be running at `http://localhost:3000` (or whatever port Vite is confi
 
 ## ⚙️ Dev Commands
 
-\`\`\`bash
+```bash
 # Frontend
 cd frontend
 npm run dev         # start Vite dev server
@@ -89,7 +89,7 @@ npm run build       # build for production
 # Backend
 cd backend
 npm start           # start Express server
-\`\`\`
+```
 
 ---
 
