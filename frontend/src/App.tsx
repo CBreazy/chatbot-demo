@@ -6,6 +6,7 @@ type Role = "user" | "assistant";
 interface ChatMessage {
   role: Role;
   content: string;
+  model?: string;
 }
 
 const App = () => {
@@ -41,6 +42,7 @@ const App = () => {
       const assistantMessage: ChatMessage = {
         role: "assistant",
         content: res.data.reply,
+        model: res.data.model,
       };
 
       setMessages([...updatedMessages, assistantMessage]);
@@ -125,6 +127,13 @@ const App = () => {
                   }`}
                 >
                   <strong>{msg.role}:</strong> {msg.content}
+
+      {/* Show model if assistant */}
+      {msg.role === "assistant" && msg.model && (
+        <div className="text-[10px] text-gray-400 mt-1">
+          Model: <span className="font-medium">{msg.model}</span>
+        </div>
+      )}
                 </div>
 
                 {msg.role === "assistant" && (
@@ -154,11 +163,10 @@ const App = () => {
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Model + Token Info */}
-          {(activeModel || tokensUsed !== null) && (
+          {/* Token Info */}
+          {(tokensUsed !== null) && (
             <div className="px-4 pb-2 text-xs text-gray-500 text-right pt-2 border-t">
-              Model: <span className="font-medium">{activeModel}</span>
-              {tokensUsed !== null && <> | Tokens used: {tokensUsed}</>}
+              {tokensUsed !== null && <> Tokens used: {tokensUsed}</>}
             </div>
           )}
 
