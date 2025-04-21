@@ -14,6 +14,8 @@ const App = () => {
   const [useFineTunedModel, setUseFineTunedModel] = useState<boolean>(false);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [activeModel, setActiveModel] = useState<string>("");
+  const [tokensUsed, setTokensUsed] = useState<number | null>(null);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -42,6 +44,8 @@ const App = () => {
       };
 
       setMessages([...updatedMessages, assistantMessage]);
+      setActiveModel(res.data.model);
+      setTokensUsed(res.data.tokens);
     } catch (error) {
       console.error("Error sending message:", error);
     } finally {
@@ -65,6 +69,7 @@ const App = () => {
 
   return (
     <div>
+      {/* Toggle Chat */}
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
@@ -74,6 +79,7 @@ const App = () => {
         </button>
       )}
 
+      {/* Chat Widget */}
       {isOpen && (
         <div className="fixed bottom-4 right-4 w-full sm:w-[380px] max-h-[85vh] bg-white shadow-xl rounded-lg flex flex-col z-50">
           {/* Header */}
@@ -148,7 +154,15 @@ const App = () => {
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Input */}
+          {/* Model + Token Info */}
+          {(activeModel || tokensUsed !== null) && (
+            <div className="px-4 pb-2 text-xs text-gray-500 text-right pt-2 border-t">
+              Model: <span className="font-medium">{activeModel}</span>
+              {tokensUsed !== null && <> | Tokens used: {tokensUsed}</>}
+            </div>
+          )}
+
+          {/* User Input */}
           <div className="flex items-center border-t p-3 bg-white">
             <input
               value={input}
@@ -157,6 +171,7 @@ const App = () => {
               placeholder="Type your message"
               className="flex-1 border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-black"
             />
+            {/* Send Button */}
             <button
               onClick={sendMessage}
               className="ml-2 bg-black text-white px-4 py-2 rounded hover:bg-gray-800 transition"

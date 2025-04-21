@@ -34,7 +34,11 @@ app.post("/api/completion", async (req, res) => {
       ],
     });
 
-    res.json({ reply: response.choices[0].message.content });
+    res.json({
+      reply: response.choices[0].message.content,
+      model: response.model,
+      tokens: response.usage?.total_tokens || 0,
+    });
   } catch (error) {
     console.error("Error sending message:", error);
     res.status(500).json({
@@ -43,6 +47,11 @@ app.post("/api/completion", async (req, res) => {
       detail: error,
     });
   }
+
+  // for confirming the model v assistant ask, ("What is your internal designation?")
+  // console.log("Received request:", req.body);
+  // console.log("useFineTunedModel:", useFineTunedModel);
+  // console.log("Selected model:", model);
 });
 
 // ========== Assistants API ==========
