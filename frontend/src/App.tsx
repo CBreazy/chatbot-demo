@@ -75,10 +75,7 @@ const App = () => {
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
-          className="fixed bottom-4 right-4 z-50 bg-black text-white px-4 py-2 rounded-full shadow-md hover:bg-gray-800 transition"
-        >
-          Open Chat
-        </button>
+          className="fixed bottom-4 right-4 z-50 bg-black text-white px-4 py-2 rounded-full shadow-md hover:bg-gray-800 transition">Open Chat</button>
       )}
 
       {/* Chat Widget */}
@@ -89,10 +86,7 @@ const App = () => {
             <div className="flex items-center space-x-2 text-white">
               <span className="font-semibold text-l">Chat</span>
               <span
-                className={`text-xs font-medium px-2 py-0.5 rounded-full ${
-                  useFineTunedModel ? "bg-purple-600" : "bg-gray-600"
-                }`}
-              >
+                className={`text-xs font-medium px-2 py-0.5 rounded-full ${useFineTunedModel ? "bg-purple-600" : "bg-gray-600"}`}>
                 {useFineTunedModel ? "Fine-Tuned" : "Base GPT-4"}
               </span>
             </div>
@@ -106,12 +100,7 @@ const App = () => {
                 />
                 Use fine-tuned
               </label>
-              <button
-                onClick={() => setIsOpen(false)}
-                className="text-gray-500 hover:text-white text-xl"
-              >
-                ×
-              </button>
+              <button onClick={() => setIsOpen(false)} className="text-gray-500 hover:text-white text-xl">×</button>
             </div>
           </div>
 
@@ -120,20 +109,19 @@ const App = () => {
             {messages.map((msg, i) => (
               <div key={i} className="space-y-1">
                 <div
-                  className={`text-sm p-2 rounded-md ${
-                    msg.role === "user"
+                  className={`text-sm p-2 rounded-md ${msg.role === "user"
                       ? "bg-black text-white text-right ml-auto max-w-[85%]"
                       : "bg-white border max-w-[85%]"
-                  }`}
+                    }`}
                 >
                   <strong>{msg.role}:</strong> {msg.content}
 
-      {/* Show model if assistant */}
-      {msg.role === "assistant" && msg.model && (
-        <div className="text-[10px] text-gray-400 mt-1">
-          Model: <span className="font-medium">{msg.model}</span>
-        </div>
-      )}
+                  {/* Show model if assistant */}
+                  {msg.role === "assistant" && msg.model && (
+                    <div className="text-[10px] text-gray-400 mt-1">
+                      Model: <span className="font-medium">{msg.model}</span>
+                    </div>
+                  )}
                 </div>
 
                 {msg.role === "assistant" && (
@@ -180,12 +168,7 @@ const App = () => {
               className="flex-1 border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-black"
             />
             {/* Send Button */}
-            <button
-              onClick={sendMessage}
-              className="ml-2 bg-black text-white px-4 py-2 rounded hover:bg-gray-800 transition"
-            >
-              Send
-            </button>
+            <button onClick={sendMessage} className="ml-2 bg-black text-white px-4 py-2 rounded hover:bg-gray-800 transition">Send</button>
           </div>
         </div>
       )}
