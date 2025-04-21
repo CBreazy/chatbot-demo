@@ -15,9 +15,6 @@ const App = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  // Ref to scroll to the bottom of the chat
-  // when a new message is added
-  // This is a workaround for the issue where the chat doesn't scroll to the bottom
   const messagesEndRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -60,9 +57,14 @@ const App = () => {
     setUseFineTunedModel(e.target.checked);
   };
 
+  const handleFeedback = (messageIndex: number, feedback: "up" | "down") => {
+    const message = messages[messageIndex];
+    console.log(`Feedback for message: "${message.content}" = ${feedback}`);
+    // Optionally store feedback or send to backend
+  };
+
   return (
     <div>
-      {/* Toggle Chat Button */}
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
@@ -72,20 +74,33 @@ const App = () => {
         </button>
       )}
 
-      {/* Chat Widget */}
       {isOpen && (
         <div className="fixed bottom-4 right-4 w-full sm:w-[380px] max-h-[85vh] bg-white shadow-xl rounded-lg flex flex-col z-50">
           {/* Header */}
           <div className="flex justify-between items-center px-4 py-3 border-b bg-black">
-            <div className="font-semibold text-l text-white">Chat</div>
+            <div className="flex items-center space-x-2 text-white">
+              <span className="font-semibold text-l">Chat</span>
+              <span
+                className={`text-xs font-medium px-2 py-0.5 rounded-full ${
+                  useFineTunedModel ? "bg-purple-600" : "bg-gray-600"
+                }`}
+              >
+                {useFineTunedModel ? "Fine-Tuned" : "Base GPT-4"}
+              </span>
+            </div>
             <div className="flex items-center space-x-2">
               <label className="text-sm flex items-center text-white">
-              <input type="checkbox" className="mr-1" checked={useFineTunedModel} onChange={toggleModel} />
-                Use fine-tuned model
+                <input
+                  type="checkbox"
+                  className="mr-1"
+                  checked={useFineTunedModel}
+                  onChange={toggleModel}
+                />
+                Use fine-tuned
               </label>
               <button
                 onClick={() => setIsOpen(false)}
-                className="text-gray-500 hover:text-black text-xl"
+                className="text-gray-500 hover:text-white text-xl"
               >
                 ×
               </button>
@@ -95,15 +110,33 @@ const App = () => {
           {/* Messages */}
           <div className="flex-1 overflow-y-auto px-4 py-2 space-y-3 bg-gray-50">
             {messages.map((msg, i) => (
-              <div
-                key={i}
-                className={`text-sm p-2 rounded-md ${
-                  msg.role === "user"
-                    ? "bg-black text-white text-right ml-auto max-w-[85%]"
-                    : "bg-white border max-w-[85%]"
-                }`}
-              >
-                <strong>{msg.role}:</strong> {msg.content}
+              <div key={i} className="space-y-1">
+                <div
+                  className={`text-sm p-2 rounded-md ${
+                    msg.role === "user"
+                      ? "bg-black text-white text-right ml-auto max-w-[85%]"
+                      : "bg-white border max-w-[85%]"
+                  }`}
+                >
+                  <strong>{msg.role}:</strong> {msg.content}
+                </div>
+
+                {msg.role === "assistant" && (
+                  <div className="flex items-center gap-2 text-xs text-gray-400 ml-2">
+                    <button
+                      onClick={() => handleFeedback(i, "up")}
+                      className="hover:text-green-500 transition"
+                    >
+                      👍
+                    </button>
+                    <button
+                      onClick={() => handleFeedback(i, "down")}
+                      className="hover:text-red-500 transition"
+                    >
+                      👎
+                    </button>
+                  </div>
+                )}
               </div>
             ))}
 
@@ -112,8 +145,6 @@ const App = () => {
                 <div className="w-5 h-5 border-2 border-black border-t-transparent rounded-full animate-spin" />
               </div>
             )}
-
-            {/* scroll to latest response */}
             <div ref={messagesEndRef} />
           </div>
 
