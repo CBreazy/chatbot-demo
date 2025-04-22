@@ -64,13 +64,22 @@ const App = () => {
   };
 
   const handleFeedback = async (messageIndex: number, feedback: "up" | "down") => {
-    const message = messages[messageIndex];
-    console.log(`Feedback for message: "${message.content}" = ${feedback}`);
+    const assistantMessage = messages[messageIndex];
+    
+    // Find the most recent user message before this assistant reply
+    const userMessage = [...messages.slice(0, messageIndex)]
+      .reverse()
+      .find((msg) => msg.role === "user");
+  
+    if (!userMessage) {
+      console.error("No matching user message found.");
+      return;
+    }
   
     try {
       await axios.post("http://localhost:3001/api/feedback", {
-        message: message.content,
-        model: message.model,
+        userMessage: userMessage.content,
+        assistantReply: assistantMessage.content,
         feedback,
       });
     } catch (error) {

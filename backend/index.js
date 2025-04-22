@@ -89,32 +89,36 @@ app.post("/api/message", async (req, res) => {
 });
 
   // ========== Feedback API ==========
-  // Feedback route
-  app.post("/api/feedback", (req, res) => {
-    const { message, model, feedback } = req.body;
+app.post("/api/feedback", (req, res) => {
+  const { userMessage, assistantReply, feedback } = req.body;
 
-    if (!message || !feedback) {
-      return res.status(400).json({ error: "Missing message or feedback" });
+  if (!userMessage || !assistantReply || !feedback) {
+    return res.status(400).json({ error: "Missing required fields" });
+  }
+
+  const trainingExample = {
+    messages: [
+      { role: "system", content: "You are a helpful assistant." },
+      { role: "user", content: userMessage },
+      { role: "assistant", content: assistantReply }
+    ],
+    metadata: {
+      feedback, // optional: "up", "down", or "neutral"
+      timestamp: new Date().toISOString()
     }
+  };
 
-    const feedbackEntry = {
-      timestamp: new Date().toISOString(),
-      message,
-      model: model || null,
-      feedback, // "up" or "down"
-    };
+  const feedbackFilePath = path.join(__dirname, "feedback.jsonl");
+  const line = JSON.stringify(trainingExample) + "\n";
 
-    const feedbackFilePath = path.join(__dirname, "feedback.jsonl");
-    const feedbackLine = JSON.stringify(feedbackEntry) + "\n";
-
-    fs.appendFile(feedbackFilePath, feedbackLine, (err) => {
-      if (err) {
-        console.error("Error writing feedback:", err);
-        return res.status(500).json({ error: "Failed to save feedback" });
-      }
-      res.json({ success: true });
-    });
+  fs.appendFile(feedbackFilePath, line, (err) => {
+    if (err) {
+      console.error("Error writing feedback:", err);
+      return res.status(500).json({ error: "Failed to save feedback" });
+    }
+    res.json({ success: true });
   });
+});
 
 app.listen(3001, () =>
   console.log("✅ Backend running on http://localhost:3001")
