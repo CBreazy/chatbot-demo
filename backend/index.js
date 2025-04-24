@@ -20,6 +20,7 @@ const openai = new OpenAI({
 
 // ========== Chat Completions API ==========
 app.post("/api/completion", async (req, res) => {
+  // console.log("Received request:", req.body);
   const { messages, useFineTunedModel } = req.body;
 
   const model = useFineTunedModel

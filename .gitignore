@@ -29,3 +29,6 @@ frontend/node_modules/
 
 # Environment variables
 .env
+
+# Feedback
+backend/feedback.jsonl
