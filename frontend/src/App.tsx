@@ -14,8 +14,8 @@ const App = () => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [useFineTunedModel, setUseFineTunedModel] = useState<boolean>(false);
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [activeModel, setActiveModel] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false); 
+  const [, setActiveModel] = useState<string>("");
   const [tokensUsed, setTokensUsed] = useState<number | null>(null);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
